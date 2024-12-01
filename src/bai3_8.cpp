@@ -30,7 +30,7 @@ using namespace std;
 
 int n, k1, k2;
 vector<int>schedule;
-vector<vector<int> > lich;
+vector<vector<int>> lich;
 
 
 bool isValidDate(){
@@ -83,7 +83,6 @@ int main(){
         }
         cout << endl;
     }
-    // vector<int> schedule = {0,1,1,0,1,1};
-    // cout << isValidDate() ? "true" : "false";
+
 }
 
