@@ -38,5 +38,57 @@ using namespace std;
 
 int n, h;
 vector<vector<int>> result;
-vector<int> s;
+vector<int> a;
 
+void checkIfValid(){
+    int count = 0;
+    for(int i = 0; i < n; i++){
+        if(a[i] != 0){
+            count++;
+        }
+    }
+    if(count == h){
+        result.push_back(a);
+    }
+}
+
+void Try(int i){
+    if(i == n){
+        checkIfValid();
+        return;
+    }
+    a.push_back(0);
+    Try(i+1);
+    a.pop_back();
+
+    a.push_back(1);
+    Try(i+1);
+    a.pop_back();
+
+}
+
+int main(){
+    int t ;
+    cin >> t;
+    vector<vector<vector<int>>> allResults;
+
+    for (int testCase = 0; testCase < t; testCase++) {
+        cin >> n >> h;
+        a.clear();
+        result.clear();
+        Try(0);
+        allResults.push_back(result);
+    }
+
+    for (int testCase = 0; testCase < t; testCase++) {
+        for (const auto& res : allResults[testCase]) {
+            for (int num : res) {
+                cout << num;
+            }
+            cout << endl;
+        }
+        if (testCase < t - 1) {
+            cout << endl;
+        }
+    }
+}
