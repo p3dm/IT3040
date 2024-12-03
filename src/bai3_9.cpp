@@ -1,34 +1,26 @@
-/***Khoảng cách Hamming giữa hai xâu cùng độ dài là số vị trí mà ký tự tại vị trí đó là khác nhau trên hai xâu. Cho  S  là xâu gồm  n  ký tự 0. 
- * Hãy liệt kê tất cả các xâu nhị phân độ dài  n , có khoảng cách Hamming với  S  bằng  H . Các xâu phải được liệt kê theo thứ tự từ điển
+/***
+ * Một y tá cần lập lịch làm việc trong  N ngày, mỗi ngày chỉ có thể là làm việc hay nghỉ ngơi. Một lịch làm việc là tốt nếu không có hai ngày nghỉ nào liên tiếp và mọi chuỗi ngày tối đại làm việc liên tiếp đều có số ngày thuộc đoạn  [K1,K2] . Hãy liệt kê tất cả các cách lập lịch tốt, với mỗi lịch in ra trên một dòng một xâu nhị phân độ dài  n  với bit 0/1 tương ứng là nghỉ/làm việc. Các xâu phải được in ra theo thứ tự từ điển
 
 Dữ liệu vào:
 
-Dòng đầu chứa  T  là số testcase
-
-T  dòng tiếp theo, mỗi dòng mô tả một testcase, ghi  N  và  H  ( 1≤H≤N≤16 )
+Ghi 3 số nguyên  N,K1,K2  ( N≤200,K1<K2≤70 )
 
 Kết quả:
 
-Với mỗi testcase, in ra danh sách các xâu thỏa mãn. In ra một dòng trống giữa hai testcase
+Ghi danh sách các lịch tìm được theo thứ tự từ điển
 
 Ví dụ:
 
 Dữ liệu mẫu:
 
-2
-4 2
-1 0
+6 2 3
 
 Kết quả mẫu:
 
-0011
-0101
-0110
-1001
-1010
-1100
-
-0
+011011
+110110
+110111
+111011
  */
 
 #include<iostream>
@@ -36,59 +28,61 @@ Kết quả mẫu:
 
 using namespace std;
 
-int n, h;
-vector<vector<int>> result;
-vector<int> a;
+int n, k1, k2;
+vector<int>schedule;
+vector<vector<int> > lich;
 
-void checkIfValid(){
-    int count = 0;
-    for(int i = 0; i < n; i++){
-        if(a[i] != 0){
-            count++;
+
+bool isValidDate(){
+    int streak = 0;
+    for(int i = 0; i < schedule.size(); i++){
+        if(schedule[i] == 1){
+            streak++;
         }
+        else{
+            if(streak > 0 &&(streak < k1 || streak > k2)){
+                return false;
+            }
+            streak = 0;
+            if(i > 0 && schedule[i-1] == 0){
+                return false;
+            }
+        }
+    } 
+    if(streak > 0 && (streak < k1 || streak > k2)){
+        return false;
     }
-    if(count == h){
-        result.push_back(a);
-    }
+    return true;
+    
 }
 
-void Try(int i){
-    if(i == n){
-        checkIfValid();
+void Try(int day){
+    if(day == n){
+        if(isValidDate()){
+            lich.push_back(schedule);
+        }
         return;
     }
-    a.push_back(0);
-    Try(i+1);
-    a.pop_back();
 
-    a.push_back(1);
-    Try(i+1);
-    a.pop_back();
+    schedule.push_back(0);
+    Try(day + 1 );
+    schedule.pop_back();
+
+    schedule.push_back(1);
+    Try(day + 1);
+    schedule.pop_back();
 
 }
 
 int main(){
-    int t ;
-    cin >> t;
-    vector<vector<vector<int>>> allResults;
-
-    for (int testCase = 0; testCase < t; testCase++) {
-        cin >> n >> h;
-        a.clear();
-        result.clear();
-        Try(0);
-        allResults.push_back(result);
+    cin >> n >> k1 >> k2;
+    Try(0);
+    for(vector<int> ngay : lich){
+        for(int num : ngay){
+            cout << num;
+        }
+        cout << endl;
     }
 
-    for (int testCase = 0; testCase < t; testCase++) {
-        for (const auto& res : allResults[testCase]) {
-            for (int num : res) {
-                cout << num;
-            }
-            cout << endl;
-        }
-        if (testCase < t - 1) {
-            cout << endl;
-        }
-    }
 }
+
