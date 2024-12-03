@@ -4,6 +4,16 @@
 ### C++ ###
 # Prerequisites
 *.d
+# Bỏ qua tất cả các thư mục và file `.dSYM`
+*.dSYM/
+*.dSYM/**
+
+# Bỏ qua tất cả các file trong thư mục `Contents` (bên trong `.dSYM`)
+*/Contents/*
+*/Contents/**
+
+# Bỏ qua các file không có đuôi
+*.[^.]*
 
 # Compiled Object files
 *.slo
