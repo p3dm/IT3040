@@ -25,80 +25,98 @@ Kết quả mẫu:
 7
  */
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <climits>
+#include<bits/stdc++.h>
+
 using namespace std;
+const int MAX = 10000;
+int n, r;
+int price[MAX][MAX];
+int x[MAX];
+bool visited[MAX];
+vector<int> vt;
+int min_price;
+int sum_price;
+int start, destination, numberOfPoint;
 
-const int INF = INT_MAX;
-
-int tsp(int pos, int visited, const vector<vector<int>> &cost, vector<vector<int>> &dp, int start, int end) {
-    if (visited == (1 << cost.size()) - 1) {
-        if (pos == end){
-            return 0;
-        } else{// Nếu đã thăm hết và đang ở điểm kết thúc
-            return (cost[pos][end] > 0) ? cost[pos][end] : INF;
-        } // Trở về điểm kết thúc
-    }
-
-    if (dp[pos][visited] != -1) return dp[pos][visited];
-
-    int res = INF;
-    for (int i = 0; i < cost.size(); ++i) {
-        if (!(visited & (1 << i)) && cost[pos][i] > 0) { // Nếu chưa thăm và có đường đi
-            int nextRes = tsp(i, visited | (1 << i), cost, dp, start, end);
-            res = min(res, cost[pos][i] + nextRes);
-        }
-    }
-
-    return dp[pos][visited] = res;
-}
-
-int solveTSP(const vector<int> &places, const vector<vector<int>> &matrix) {
-    int m = places.size();
-    vector<vector<int>> cost(m, vector<int>(m, INF));
-
-    // Tạo ma trận chi phí cho các địa điểm trong danh sách yêu cầu
-    for (int i = 0; i < m; ++i) {
-        for (int j = 0; j < m; ++j) {
-            cost[i][j] = matrix[places[i] - 1][places[j] - 1];
-        }
-    }
-
-    // Khởi tạo DP và chạy thuật toán TSP
-    vector<vector<int>> dp(m, vector<int>(1 << m, -1));
-    int start = 0, end = m - 1;
-    return tsp(start, 1 << start, cost, dp, start, end);
-}
-
-int main() {
-    int n, r;
+void input(){
     cin >> n >> r;
+    for(int i=0; i<n; i++)
+        for(int j=0; j<n; j++){
+            cin >> price[i][j];
+        }
+}
 
-    // Nhập ma trận chi phí
-    vector<vector<int>> matrix(n, vector<int>(n));
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            cin >> matrix[i][j];
+bool check(int a, int i){
+    if(visited[vt[i]]) return false;
+    if(price[x[a-1]][vt[i]] == 0) return false;
+    return true;
+}
+
+void solution(){
+    if(price[x[numberOfPoint-2]][destination] == 0) return;
+    min_price = min(min_price, sum_price + price[x[numberOfPoint-2]][destination]);
+}
+
+void TRY(int a){
+    for(int i=1; i<numberOfPoint-1; i++){
+        if(check(a, i)){
+            visited[vt[i]] = true;
+            sum_price += price[x[a-1]][vt[i]];
+
+            x[a] = vt[i];
+            if(a == numberOfPoint-2) solution();
+            else TRY(a+1);
+
+            visited[vt[i]] = false;
+            sum_price -= price[x[a-1]][vt[i]];
         }
     }
+}
 
-    // Nhập danh sách các địa điểm mỗi người muốn tham quan
-    vector<vector<int>> itineraries(r);
-    for (int i = 0; i < r; ++i) {
-        int x;
-        while (cin >> x) {
-            itineraries[i].push_back(x);
-            if (cin.peek() == '\n') break; // Dừng khi hết dòng
+int main(){
+    string str;
+    input(); getline(cin,str);
+    vector<int> result;
+    while(r > 0){
+        min_price = INT_MAX;
+        sum_price = 0;
+
+        getline(cin, str);
+
+        
+        while (!str.empty()){
+            stringstream convert(str.substr(0, str.find(" ")));
+            int tmp = 0;
+            convert >> tmp;
+            vt.push_back(tmp - 1);
+
+            if (str.find(" ") > str.size()){
+                break;
+            } else {
+                str.erase(0, str.find(" ") + 1); // Update string
+            }
+        }
+
+        // Bat dau khoi tao cac du lieu can thiet truoc khi quay lui
+        start = vt[0]; // diem bat dau dau
+        destination = vt[vt.size()-1]; // diem dich
+        numberOfPoint = vt.size(); // so diem phai di qua
+        x[0] = start; x[numberOfPoint-1] = destination;
+        for(int i=0; i<n; i++)
+            visited[i] = false;
+
+        TRY(1);
+        result.push_back(min_price);
+        vt.erase(vt.begin(), vt.end());
+        r--;
+    }
+    for(int num : result){
+        if(num == INT_MAX){
+            cout << "0" << endl;
+        }
+        else{
+        cout << num << endl;
         }
     }
-
-    // Tính toán và in kết quả cho từng người
-    for (int i = 0; i < r; ++i) {
-        int result = solveTSP(itineraries[i], matrix);
-        cout << (result >= INF ? 0 : result) << endl; // Nếu không có đường đi thì in 0
-    }
-
-    return 0;
+    
 }

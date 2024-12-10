@@ -4,19 +4,24 @@
 ### C++ ###
 # Prerequisites
 *.d
-# Bỏ qua tất cả các thư mục và file `.dSYM`
+
+# Ignore compiled object files
+*.o
+*.obj
+
+# Ignore compiled binaries
+*.out
+*.exe
+*.app
+*.bin
+
+# Ignore debug files (macOS)
 *.dSYM/
 *.dSYM/**
 
-# Bỏ qua tất cả các file trong thư mục `Contents` (bên trong `.dSYM`)
-*/Contents/*
-*/Contents/**
+# Ignore system files (macOS)
+.DS_Store
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
 
 # Precompiled Headers
 *.gch
