@@ -25,7 +25,10 @@ Kết quả mẫu:
 7
  */
 
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <climits>
 
 using namespace std;
 const int MAX = 10000;
@@ -97,7 +100,6 @@ int main(){
             }
         }
 
-        // Bat dau khoi tao cac du lieu can thiet truoc khi quay lui
         start = vt[0]; // diem bat dau dau
         destination = vt[vt.size()-1]; // diem dich
         numberOfPoint = vt.size(); // so diem phai di qua

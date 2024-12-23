@@ -37,7 +37,7 @@ Kết quả mẫu:
 using namespace std;
 
 int n, h;
-vector<vector<int> > result;
+vector<vector<int>> result;
 vector<int> a;
 
 void checkIfValid(){

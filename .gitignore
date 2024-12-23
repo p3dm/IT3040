@@ -7,7 +7,7 @@
 
 # Ignore compiled object files
 *.o
-*.obj
+*.obj 
 
 # Ignore compiled binaries
 *.out
