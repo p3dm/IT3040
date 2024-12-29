@@ -51,11 +51,11 @@ Số từ trong mỗi truy vấn không quá  10
 using namespace std;
 
 int n, q;
-vector<vector<string>> texts; // n texts
-vector<vector<string>> queries; // q queries
-map<pair<string, int>, int> word_frequency; // frequency of occurrence of the word @t in the text[i] (pair<string, int>)
-vector<int> max_frequency; // maximum frequency of occurrence in the text[i]
-map<string, int> document_frequency; // number of texts containing the word t
+vector<vector<string>> texts; 
+vector<vector<string>> queries; 
+map<pair<string, int>, int> word_frequency; 
+vector<int> max_frequency; 
+map<string, int> document_frequency; 
 
 // split string by ','
 inline vector<string> splitByComma(const string &s) {
